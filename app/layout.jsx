@@ -1,13 +1,9 @@
-
-
-const layout = ({children}) => {
+const layout = ({ children }) => {
   return (
     <html>
-      <body>
-        <main>{children}</main>
-      </body>
+      <body>{children}</body>
     </html>
-  )
-}
+  );
+};
 
-export default layout
+export default layout;
