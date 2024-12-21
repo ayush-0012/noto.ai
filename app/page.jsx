@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { singIn, singOut, useSession, getProviders } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { useSession, signIn } from "next-auth/react";
 import { BrainCog, Github, Sparkles, ArrowRight } from "lucide-react";
 
 const features = [
@@ -25,9 +25,19 @@ const features = [
 ];
 
 const Home = () => {
+  // const [provider, setProvider] = useState(null);
+
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session) {
+      window.locate.href = "/generate";
+    }
+  }, [session]);
+
   return (
     <>
-      <div className="w-[500px] h-[650px] mx-auto flex flex-col justify-center items-center ">
+      <div className="w-[440px] h-full mx-auto flex flex-col justify-center items-center">
         <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center mt-3">
           <BrainCog className="w-8 h-8 text-white" />
         </div>
@@ -42,7 +52,10 @@ const Home = () => {
         </div>
 
         <div className="bg-[#0f0e13] w-full h-full p-3 rounded-md border-[#1d0f29] mt-4">
-          <button className="flex bg-[#27272a] hover:bg-[#353538] w-full h-9 items-center justify-center rounded-lg">
+          <button
+            className="flex bg-[#27272a] hover:bg-[#353538] w-full h-9 items-center justify-center rounded-lg"
+            onClick={() => signIn("google", { callbackUrl: "/generate" })}
+          >
             <svg viewBox="0 0 24 24" className="w-5 h-5 mr-2">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -77,22 +90,20 @@ const Home = () => {
 
         <div className="grid w-full mt-4">
           {features.map((feature, index) => (
-            <>
-              <div
-                key={index}
-                className="w-full h-28 border rounded-lg flex items-center justify-center mb-3 border-[#321c43] bg-[#0f0e13]"
-              >
-                <div className="w-16">{feature.logo}</div>
-                <div>
-                  <div className="text-white font-bold text-center">
-                    {feature.title}
-                  </div>
-                  <div className="text-zinc-500 w-60 text-center text-sm">
-                    {feature.description}
-                  </div>
+            <div
+              key={index}
+              className="w-full h-28 border rounded-lg flex items-center justify-center mb-3 border-[#321c43] bg-[#0f0e13]"
+            >
+              <div className="w-16">{feature.logo}</div>
+              <div>
+                <div className="text-white font-bold text-center">
+                  {feature.title}
+                </div>
+                <div className="text-zinc-500 w-60 text-center text-sm">
+                  {feature.description}
                 </div>
               </div>
-            </>
+            </div>
           ))}
         </div>
       </div>

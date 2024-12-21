@@ -11,4 +11,7 @@ const connectDB = async () => {
   }
 };
 
-connectDB();
+export default connectDB;
+// console.log("helolo");
+
+// connectDB();
