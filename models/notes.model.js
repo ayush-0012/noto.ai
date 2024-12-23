@@ -7,11 +7,7 @@ const notesSchema = new mongoose.Schema(
       required: [true, "title is required"],
       unique: false,
     },
-    content: {
-      type: String,
-      required: true,
-    },
-    file: {
+    fileUrl: {
       type: String,
       required: true,
     },
@@ -24,6 +20,6 @@ const notesSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Notes = mongoose.models.Notes || mongoose.model("notes", notesSchema);
+const Notes = mongoose.models.Notes || mongoose.model("Notes", notesSchema);
 
 export default Notes;
