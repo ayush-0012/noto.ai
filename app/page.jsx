@@ -27,13 +27,13 @@ const Home = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [githubLoading, setGithubLoading] = useState(false);
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (session) {
-      window.locate.href = "/generate";
+    if (status === "authenticated" || session == true) {
+      window.location.href = "/generate";
     }
-  }, [session]);
+  }, [status]);
 
   function handleGoogleSignIn() {
     signIn("google", { callbackUrl: "/generate" });
@@ -91,7 +91,7 @@ const Home = () => {
             )}
           </button>
 
-          <button
+          {/* <button
             className=" bg-[#27272a] flex w-full h-9 items-center justify-center mt-3 rounded-lg border border-[#321c43] hover:bg-[#353538]"
             onClick={() => handleGithubSignIn()}
           >
@@ -101,7 +101,7 @@ const Home = () => {
             ) : (
               <p className="font-sans text-white ml-4">Continue with GitHub</p>
             )}
-          </button>
+          </button> */}
           <p className="text-[#66666e] text-center text-sm mt-2">
             By continuing, you agree to our{" "}
             <span className="text-[#6770c7] hover:underline">Terms</span> and{" "}
