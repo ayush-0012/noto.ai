@@ -25,7 +25,7 @@ const features = [
 ];
 
 const Home = () => {
-  // const [provider, setProvider] = useState(null);
+  const [loading, setloading] = useState(false);
 
   const { data: session } = useSession();
 
@@ -34,6 +34,11 @@ const Home = () => {
       window.locate.href = "/generate";
     }
   }, [session]);
+
+  function handleSignIn() {
+    signIn("google", { callbackUrl: "/generate" });
+    setloading(true);
+  }
 
   return (
     <>
@@ -54,7 +59,7 @@ const Home = () => {
         <div className="bg-[#0f0e13] w-full h-full p-3 rounded-md border-[#1d0f29] mt-4">
           <button
             className="flex bg-[#27272a] hover:bg-[#353538] w-full h-9 items-center justify-center rounded-lg"
-            onClick={() => signIn("google", { callbackUrl: "/generate" })}
+            onClick={() => handleSignIn()}
           >
             <svg viewBox="0 0 24 24" className="w-5 h-5 mr-2">
               <path
@@ -74,13 +79,17 @@ const Home = () => {
                 fill="#EA4335"
               />
             </svg>
-            <p className="font-sans ml-3 text-white">Continue with Google</p>
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              <p className="font-sans ml-3 text-white">Continue with Google</p>
+            )}
           </button>
 
-          <button className=" bg-[#27272a] flex w-full h-9 items-center justify-center mt-3 rounded-lg border border-[#321c43] hover:bg-[#353538]">
+          {/* <button className=" bg-[#27272a] flex w-full h-9 items-center justify-center mt-3 rounded-lg border border-[#321c43] hover:bg-[#353538]">
             <Github className="text-white w-5 h-5" />
             <p className="font-sans text-white ml-4">Continue with GitHub</p>
-          </button>
+          </button> */}
           <p className="text-[#66666e] text-center text-sm mt-2">
             By continuing, you agree to our{" "}
             <span className="text-[#6770c7] hover:underline">Terms</span> and{" "}
