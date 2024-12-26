@@ -16,7 +16,7 @@ export async function POST(req) {
       }
 
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const prompt = `Generate detailed and clean notes for the following URL: ${url}`;
+      const prompt = `Generate detailed and clean notes and make the headings bold for the following URL: ${url}`;
       const aiResponse = await model.generateContent(prompt);
       notesContent = aiResponse.response.text();
 
@@ -43,7 +43,7 @@ export async function POST(req) {
         `data:application/pdf;base64,${Buffer.from(notesContent).toString("base64")}`,
         {
           resource_type: "raw",
-          format: "txt",
+          format: "docx",
           folder: "notes",
           public_id: `${sanitizedFileName}_${Date.now()}`,
         }

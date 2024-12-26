@@ -1,7 +1,17 @@
+"use client";
+
+import { signOut } from "next-auth/react";
+
 const Genearate = () => {
+  function handleSignOut() {
+    signOut({ callbackUrl: "/" });
+    localStorage.removeItem("userId");
+  }
+
   return (
     <>
-      <div className="text-white">generate</div>
+      <div className="">generate</div>
+      <button onClick={() => handleSignOut()}>signOut</button>
     </>
   );
 };
