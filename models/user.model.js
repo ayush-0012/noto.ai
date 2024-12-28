@@ -15,16 +15,17 @@ const UserSchema = new mongoose.Schema({
   profilePic: {
     type: String,
   },
-  files: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Notes",
-    },
-  ],
+
   generateHistory: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Notes",
+      fileUrl: {
+        type: String,
+        required: true,
+      },
+      fileId: {
+        type: String,
+        required: true,
+      },
     },
   ],
 });
