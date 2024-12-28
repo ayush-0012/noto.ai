@@ -1,39 +1,22 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
-import { BrainCog, Github, Sparkles, ArrowRight } from "lucide-react";
-
-const features = [
-  {
-    logo: <BrainCog className="w-7 h-7 text-purple-400" />,
-    title: "AI-Powered Notes",
-    description: "Generates well-structured noted from any url",
-  },
-  {
-    logo: <Sparkles className="w-7 h-7 text-purple-400" />,
-    title: "Smart Formatting",
-    description: "Automatically formats and organize your content",
-  },
-
-  {
-    logo: <ArrowRight className="w-7 h-7 text-purple-400" />,
-    title: "Quick Generation",
-    description: "Transform your important stuff into notes in seconds",
-  },
-];
+import { BrainCog } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { features } from "@/utils/content";
 
 const Home = () => {
   const [loading, setloading] = useState(false);
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
-    if (session) {
-      window.locate.href = "/generate";
+    if (status === "authenticated" && session) {
+      router.push("/generate");
     }
-  }, [session]);
+  }, [session, status]);
 
   function handleSignIn() {
     signIn("google", { callbackUrl: "/generate" });
@@ -101,14 +84,16 @@ const Home = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="w-full h-28 border rounded-lg flex items-center justify-center mb-3 border-[#321c43] bg-[#0f0e13]"
+              className="w-full h-28 border rounded-lg flex items-center justify-start mb-3 border-[#321c43] bg-[#0f0e13]"
             >
-              <div className="w-16">{feature.logo}</div>
-              <div>
-                <div className="text-white font-bold text-center">
+              <div className="w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center ml-5 mt-3">
+                {feature.logo}
+              </div>
+              <div className="mt-3 flex flex-col ml-6 items-start">
+                <div className="font-semibold text-base text-gray-300">
                   {feature.title}
                 </div>
-                <div className="text-zinc-500 w-60 text-center text-sm">
+                <div className="text-sm text-zinc-400">
                   {feature.description}
                 </div>
               </div>

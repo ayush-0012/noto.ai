@@ -3,17 +3,36 @@ import GoogleProvider from "next-auth/providers/google";
 import User from "@/models/user.model";
 import connectDB from "@/utils/db";
 
-export const authOptions = {
+export const handler = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
+  },
   callbacks: {
-    async session({ session }) {
-      const sessionUser = await User.findOne({ email: session.user.email });
-      session.user.id = sessionUser._id.toString();
+    async jwt({ token, user, account, trigger }) {
+      if (account && user) {
+        await connectDB();
+        const dbUser = await User.findOne({ email: token.email });
+        if (dbUser) {
+          token.userId = dbUser._id.toString();
+        }
+        console.log("token", token);
+        console.log("user", dbUser);
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token?.userId) {
+        session.user.id = token.userId;
+        console.log("Session callback", session);
+      }
       return session;
     },
     async signIn({ profile }) {
@@ -35,7 +54,6 @@ export const authOptions = {
       }
     },
   },
-};
+});
 
-const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
