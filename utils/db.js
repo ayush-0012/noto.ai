@@ -4,6 +4,8 @@ const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
       dbname: "NotoAi",
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
     });
     console.log("connected to database");
   } catch (error) {
@@ -12,6 +14,3 @@ const connectDB = async () => {
 };
 
 export default connectDB;
-// console.log("helolo");
-
-// connectDB();
