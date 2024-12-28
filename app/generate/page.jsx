@@ -9,14 +9,14 @@ import { useGenerateNotesUrl } from "@/hooks/useGenerateNotesUrl";
 const Genearate = () => {
   const [loading, setloading] = useState(false);
 
-  const { data: session } = useSession();
-
-  console.log("/generate", session);
+  const { data: session, status } = useSession();
 
   const url =
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain";
   const fileName = "prototype chain";
-  const userId = "676fb5c319ce629dcd174766";
+  const userId = session.user.id;
+
+  console.log(userId);
 
   function handleSignOut() {
     signOut({ callbackUrl: "/" });
