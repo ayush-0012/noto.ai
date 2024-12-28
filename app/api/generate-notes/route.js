@@ -2,6 +2,7 @@ import Notes from "@/models/notes.model";
 import connectDB from "@/utils/db";
 import cloudinary from "@/utils/cloudinary";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import User from "@/models/user.model";
 
 export async function POST(req) {
   await connectDB();
@@ -24,7 +25,7 @@ export async function POST(req) {
         throw new Error("Failed to generate notes content");
       }
 
-      notesContent = notesContent.replace(/[\*\#\-\_\=\+\~\!]/g, "");
+      notesContent = notesContent.replace(/[\*\#\-\_\=\+\~\!]/, "");
     } catch (error) {
       console.error("AI content generation failed:", error);
       return new Response(
@@ -60,16 +61,41 @@ export async function POST(req) {
     }
     // 5. Save to Database
     try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return new Response(
+          JSON.stringify({ error: "user not found" }, { status: 404 })
+        );
+      }
+
       const newNote = await Notes.create({
         title: fileName,
         fileUrl: cloudinaryResponse.secure_url,
-        user: userId,
+        userId: userId,
       });
 
+      console.log("New Note ID", typeof newNote._id.toString());
+
+      if (!cloudinaryResponse.secure_url || !newNote._id) {
+        throw new Error("Missing required fields for generateHistory");
+      }
+
+      await User.findByIdAndUpdate(userId, {
+        $push: {
+          generateHistory: {
+            fileUrl: cloudinaryResponse.secure_url,
+            fileId: newNote._id.toString(),
+          },
+        },
+      });
+
+      // await User.save();
       return new Response(
         JSON.stringify({
           success: true,
           note: newNote,
+          user,
         }),
         { status: 200 }
       );
