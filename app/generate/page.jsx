@@ -3,13 +3,14 @@
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { instructions } from "@/utils/content";
-import { BrainCog, Sparkles } from "lucide-react";
-import { useGenerateNotesUrl } from "@/hooks/useGenerateNotesUrl";
+import { BrainCog, Sparkles, Download } from "lucide-react";
+import Modal from "@/components/modal/Modal";
 
 const Genearate = () => {
   const [loading, setloading] = useState(false);
+  const [modal, setModal] = useState(false);
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const url =
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain";
@@ -24,13 +25,7 @@ const Genearate = () => {
 
   async function handleGenerateNotes() {
     setloading(true);
-    try {
-      await useGenerateNotesUrl(url, fileName, userId);
-    } catch (error) {
-      console.log("error occured", error);
-    } finally {
-      setloading(false);
-    }
+    setModal(true);
   }
 
   return (
@@ -55,21 +50,41 @@ const Genearate = () => {
           Generate Notes in Seconds
         </p>
 
-        <div className="flex justify-center mt-4 w-full">
-          <button
-            className="flex gap-2 items-center justify-center bg-gradient-to-r from-purple-500 to-violet-800 font-bold w-3/4 rounded-lg h-12"
-            onClick={() => handleGenerateNotes()}
-          >
-            <Sparkles />
-            {loading ? <span>Generating...</span> : <span>Generate Notes</span>}
-          </button>
+        <div className="flex justify-center mt-4 w-full px-4">
+          <div className="w-full pr-2">
+            <button
+              className="flex gap-2 items-center justify-center bg-gradient-to-r from-purple-500 to-violet-800  font-bold w-full rounded-lg h-12"
+              onClick={() => handleGenerateNotes()}
+            >
+              <Sparkles />
+              {loading ? (
+                <span>Generating...</span>
+              ) : (
+                <span>Generate Notes</span>
+              )}
+            </button>
+          </div>
+          <div className="w-full pl-2">
+            <button
+              className="flex gap-2 items-center justify-center  font-bold w-full rounded-lg h-12 border-2 hover:bg-white hover:text-black"
+              onClick={() => handleGenerateNotes()}
+            >
+              <Download />
+              {loading ? (
+                <span>Generating...</span>
+              ) : (
+                <span>Generate and save</span>
+              )}
+            </button>
+          </div>
         </div>
-
+        {modal ? <Modal showModal={modal} setShowModal={setModal} /> : ""}
         <p className="text-center mt-4 px-4 text-zinc-300 text-sm">
           Follow these simple steps to transform any webpage into
           well-structured notes
         </p>
         {/* INSTRUCTIONS DIV */}
+
         <div className="p-1 mt-4">
           {instructions.map((instruction, index) => (
             <div
