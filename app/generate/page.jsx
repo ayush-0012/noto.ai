@@ -1,14 +1,18 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { instructions } from "@/utils/content";
 import { BrainCog, Sparkles, Download } from "lucide-react";
-import Modal from "@/components/modal/Modal";
+import Modal from "@/components/Modal";
+import { generateNotes } from "@/utils/generateNotes";
+import { GenerateNotesUrl } from "@/utils/generateNotesUrl";
+import FileNameModal from "@/components/FileNameModal";
 
 const Genearate = () => {
   const [loading, setloading] = useState(false);
-  const [modal, setModal] = useState(false);
+  const [confirmationModal, setConfirmationModal] = useState(false);
+  const [fileNameModal, setFileNameModal] = useState(false);
 
   const { data: session } = useSession();
 
@@ -25,13 +29,22 @@ const Genearate = () => {
 
   async function handleGenerateNotes() {
     setloading(true);
-    setModal(true);
+    setConfirmationModal(true);
+    try {
+      // const response = await GenerateNotesUrl(url);
+      // setNotesContent(response);
+      // console.log(response);
+    } catch (error) {
+      console.log("error generating notes", error);
+    } finally {
+      setloading(false);
+    }
   }
 
   return (
     <>
-      <div>
-        <div className="flex items-center justify-between space-x-1 mt-4 mx-4">
+      <div className="w-[480px] h-[610px]">
+        <div className=" flex items-center justify-between space-x-1 mt-4 mx-4">
           <div className="flex gap-2">
             <BrainCog className="w-6 h-6 text-purple-400" />
             <span className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-400">
@@ -64,21 +77,22 @@ const Genearate = () => {
               )}
             </button>
           </div>
-          <div className="w-full pl-2">
-            <button
-              className="flex gap-2 items-center justify-center  font-bold w-full rounded-lg h-12 border-2 hover:bg-white hover:text-black"
-              onClick={() => handleGenerateNotes()}
-            >
-              <Download />
-              {loading ? (
-                <span>Generating...</span>
-              ) : (
-                <span>Generate and save</span>
-              )}
-            </button>
-          </div>
         </div>
-        {modal ? <Modal showModal={modal} setShowModal={setModal} /> : ""}
+        {confirmationModal && (
+          <Modal
+            showModal={confirmationModal}
+            setShowModal={setConfirmationModal}
+            setFileModal={setFileNameModal}
+          />
+        )}
+
+        {fileNameModal && (
+          <FileNameModal
+            onSubmit={handleGenerateNotes}
+            onCancel={() => setFileNameModal(false)}
+          />
+        )}
+
         <p className="text-center mt-4 px-4 text-zinc-300 text-sm">
           Follow these simple steps to transform any webpage into
           well-structured notes
