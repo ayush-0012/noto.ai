@@ -12,6 +12,7 @@ const Home = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  console.log(session);
   useEffect(() => {
     if (status === "authenticated" && session) {
       router.push("/generate");
@@ -25,12 +26,12 @@ const Home = () => {
 
   return (
     <>
-      <div className="w-[440px] h-full mx-auto flex flex-col justify-center items-center">
-        <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center mt-3">
-          <BrainCog className="w-8 h-8 text-white" />
+      <div className="w-[480px] h-full mx-auto flex flex-col justify-center items-center">
+        <div className="mx-auto rounded-full bg-purple-500/10 flex items-center justify-center mt-3">
+          <BrainCog className="w-8 h-8 text-purple-400" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400 text-center mt-2">
+          <h1 className="text-2xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-400 text-center mt-2">
             AI Notes Assistant
           </h1>
           <p className="text-md bg-clip-text text-transparent text-zinc-400 max-w-xs mx-auto text-center mt-2">
@@ -39,7 +40,7 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="bg-[#0f0e13] w-full h-full p-3 rounded-md border-[#1d0f29] mt-4">
+        <div className="bg-[#0f0e13] w-[450px] h-full p-3 rounded-md border-[#1d0f29] mt-4 px-4">
           <button
             className="flex bg-[#27272a] hover:bg-[#353538] w-full h-9 items-center justify-center rounded-lg"
             onClick={() => handleSignIn()}
@@ -80,7 +81,7 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="grid w-full mt-4">
+        <div className="grid w-[450px] mt-4">
           {features.map((feature, index) => (
             <div
               key={index}
