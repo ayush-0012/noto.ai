@@ -7,7 +7,7 @@ import User from "@/models/user.model";
 export async function POST(req) {
   await connectDB();
   try {
-    const { url, fileName, userId } = await req.json();
+    const { url, fileName, userId, isFile } = await req.json();
 
     let notesContent;
     try {
@@ -40,15 +40,27 @@ export async function POST(req) {
     const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9]/g, "_");
     let cloudinaryResponse;
     try {
-      cloudinaryResponse = await cloudinary.uploader.upload(
-        `data:application/pdf;base64,${Buffer.from(notesContent).toString("base64")}`,
-        {
-          resource_type: "raw",
-          format: "docx",
-          folder: "notes",
-          public_id: `${sanitizedFileName}_${Date.now()}`,
-        }
-      );
+      if (isFile) {
+        cloudinaryResponse = await cloudinary.uploader.upload(
+          `data:application/pdf;base64,${Buffer.from(notesContent).toString("base64")}`,
+          {
+            resource_type: "raw",
+            format: "docx",
+            folder: "notes",
+            public_id: `${sanitizedFileName}_${Date.now()}`,
+          }
+        );
+      } else {
+        cloudinaryResponse = await cloudinary.uploader.upload(
+          `data:application/pdf;base64,${Buffer.from(notesContent).toString("base64")}`,
+          {
+            resource_type: "raw",
+            format: "txt",
+            folder: "notes",
+            public_id: `${sanitizedFileName}_${Date.now()}`,
+          }
+        );
+      }
     } catch (uploadError) {
       console.error("Cloudinary upload failed:", uploadError);
       return new Response(
