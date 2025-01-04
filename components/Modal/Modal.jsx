@@ -1,16 +1,40 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { generateNotesUrl } from "@/utils/generateNotesUrl";
+import { useContext, useState } from "react";
+import { notesLinkContext } from "../Context/NotesLinkProvider";
 
-const Modal = ({ showModal, setShowModal, setFileModal }) => {
+const Modal = ({ showModal, setShowModal, setFileModal, setLoading }) => {
+  const { notesLink, setNotesLink } = useContext(notesLinkContext);
+  const [isFile, setIsFile] = useState(null);
+
+  const { data: session } = useSession();
+  const url = "https://developer.mozilla.org/en-US/docs/Web/Events";
+  const userId = session?.user?.id;
+  console.log(userId);
+  const fileName = url.replace(url, "notoAi_yourNotes");
+
   const handleYes = () => {
     setShowModal(false);
     setFileModal(true);
+    setIsFile(true);
   };
 
-  const handleNo = () => {
+  const handleNo = async () => {
     setShowModal(false);
-    // Handle direct note generation without file here
+    setIsFile(false);
+
+    try {
+      const response = await generateNotesUrl(url, fileName, userId, isFile);
+      const generatedUrl = response.data.note.fileUrl;
+      setNotesLink(generatedUrl);
+    } catch (error) {
+      console.log("error generating notes", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

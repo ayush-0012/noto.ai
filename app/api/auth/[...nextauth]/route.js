@@ -22,9 +22,20 @@ export const handler = NextAuth({
           await connectDB();
           const dbUser = await User.findOne({ email: token.email });
           if (dbUser) {
-            token.userId = dbUser._id.toString();
+            return {
+              ...token,
+              userId: dbUser._id.toString(),
+              id: dbUser._id.toString(),
+            };
           }
         }
+        //returns token if there is any existing one
+        if (token?.userId) {
+          return token;
+        }
+        console.log("token", token.userId);
+        console.log("token .id", token.id);
+
         return token;
       } catch (error) {
         console.error("Error in jwt callback:", error);
@@ -38,6 +49,7 @@ export const handler = NextAuth({
           id: token.userId,
         };
       }
+      console.log("session callback", token.userId);
       return session;
     },
     async signIn({ profile }) {
