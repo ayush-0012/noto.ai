@@ -3,6 +3,7 @@ import Provider from "@/components/Provider";
 import { handler } from "./api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import NotesLinkProvider from "@/components/Context/NotesLinkProvider";
+import FileLinkProvider from "@/components/Context/FileLinkProvider";
 
 export const metadata = {
   title: "Noto.ai",
@@ -11,7 +12,9 @@ export const metadata = {
 };
 const AppProviders = ({ children, session }) => (
   <Provider session={session}>
-    <NotesLinkProvider>{children}</NotesLinkProvider>
+    <NotesLinkProvider>
+      <FileLinkProvider>{children}</FileLinkProvider>
+    </NotesLinkProvider>
   </Provider>
 );
 const RootLayout = async ({ children }) => {
