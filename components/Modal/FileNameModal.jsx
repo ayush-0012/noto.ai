@@ -1,15 +1,39 @@
 "use client";
 
+import { generateNotesUrl } from "@/utils/generateNotesUrl";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { fileLinkContext } from "../Context/FileLinkProvider";
+import { useSession } from "next-auth/react";
 
-const FileNameModal = ({ onSubmit, onCancel }) => {
+const FileNameModal = ({
+  onCancel,
+  setLoading,
+  setFileNameModal,
+  setConfirmationModal,
+}) => {
   const [fileName, setFileName] = useState("");
+  const { fileLink, setFileLink } = useContext(fileLinkContext);
+  const { data: session } = useSession();
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (fileName.trim()) {
-      onSubmit(fileName);
+  const url =
+    "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting";
+
+  const userId = session?.user?.id;
+
+  async function handleFileName() {
+    setFileNameModal(false);
+    setLoading(true);
+    setConfirmationModal(false);
+
+    try {
+      const response = await generateNotesUrl(url, fileName, userId, true);
+      const generatedUrl = response.data.note.fileUrl;
+      setFileLink(generatedUrl);
+    } catch (error) {
+      console.log("error generating notes", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -24,7 +48,7 @@ const FileNameModal = ({ onSubmit, onCancel }) => {
           />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-4">
           <p className="text-sm text-zinc-400">
             Please enter a name for your notes file
           </p>
@@ -54,11 +78,12 @@ const FileNameModal = ({ onSubmit, onCancel }) => {
             <button
               type="submit"
               className="px-4 py-2 text-sm bg-gradient-to-r from-purple-700 to-violet-800 rounded-lg"
+              onClick={handleFileName}
             >
               Generate
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
