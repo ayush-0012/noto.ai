@@ -8,12 +8,14 @@ import Modal from "@/components/Modal/Modal";
 import FileNameModal from "@/components/Modal/FileNameModal";
 import { notesLinkContext } from "@/components/Context/NotesLinkProvider";
 import Link from "next/link";
+import { fileLinkContext } from "@/components/Context/FileLinkProvider";
 
 const Genearate = () => {
   const [loading, setloading] = useState(false);
-  const [confirmationModal, setConfirmationModal] = useState(false);
+  const [confirmationModal, setConfirmationModal] = useState(null);
   const [fileNameModal, setFileNameModal] = useState(false);
   const { notesLink } = useContext(notesLinkContext);
+  const { fileLink } = useContext(fileLinkContext);
 
   const { data: session } = useSession();
 
@@ -30,7 +32,6 @@ const Genearate = () => {
   }
 
   function handleGenerateNotes() {
-    setloading(true);
     setConfirmationModal(true);
   }
 
@@ -83,29 +84,54 @@ const Genearate = () => {
 
           {fileNameModal && (
             <FileNameModal
-              onSubmit={handleGenerateNotes}
               onCancel={() => setFileNameModal(false)}
+              setLoading={setloading}
+              setFileNameModal={setFileNameModal}
+              setConfirmationModal={setConfirmationModal}
             />
           )}
-          {!confirmationModal ? (
-            <>
-              <div className="mt-4">
-                <p className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-400 text-center">
-                  Here are your Notes
-                </p>
-                <div className="text-center px-2 mx-4 border-[#321c43] rounded-lg bg-[#1a1a1a] hover:bg-[#321c43]/50 py-3 mt-2">
-                  <Link
-                    href={notesLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {notesLink}
-                  </Link>
-                </div>
-              </div>
-            </>
+          {!notesLink ? (
+            <div className="mt-4">
+              <p className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-400 text-center">
+                {" "}
+              </p>
+            </div>
           ) : (
+            <div className="mt-4">
+              <p className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-400 text-center mb-2">
+                Here are your Notes
+              </p>
+              <div className="text-center px-2 mx-4 border-[#321c43] rounded-lg bg-[#1a1a1a] hover:underline underline-offset-1">
+                <Link
+                  href={notesLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600"
+                >
+                  {notesLink}
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {!fileLink ? (
             ""
+          ) : (
+            <div className="mt-4">
+              <p className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-400 text-center mb-2">
+                Here are your Notes
+              </p>
+              <div className="text-center px-2 mx-4 border-[#321c43] rounded-lg bg-[#1a1a1a] hover:underline underline-offset-1 py-2">
+                <Link
+                  href={fileLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600"
+                >
+                  {fileLink}
+                </Link>
+              </div>
+            </div>
           )}
 
           <p className="text-center mt-4 px-4 text-zinc-300 text-sm">
