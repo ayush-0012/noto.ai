@@ -8,7 +8,6 @@ import { notesLinkContext } from "../Context/NotesLinkProvider";
 
 const Modal = ({ showModal, setShowModal, setFileModal, setLoading }) => {
   const { notesLink, setNotesLink } = useContext(notesLinkContext);
-  const [isFile, setIsFile] = useState(null);
 
   const { data: session } = useSession();
   const url = "https://developer.mozilla.org/en-US/docs/Web/Events";
@@ -19,15 +18,13 @@ const Modal = ({ showModal, setShowModal, setFileModal, setLoading }) => {
   const handleYes = () => {
     setShowModal(false);
     setFileModal(true);
-    setIsFile(true);
   };
 
   const handleNo = async () => {
     setShowModal(false);
-    setIsFile(false);
-
+    setLoading(true);
     try {
-      const response = await generateNotesUrl(url, fileName, userId, isFile);
+      const response = await generateNotesUrl(url, fileName, userId, false);
       const generatedUrl = response.data.note.fileUrl;
       setNotesLink(generatedUrl);
     } catch (error) {
