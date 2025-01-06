@@ -3,6 +3,7 @@ import connectDB from "@/utils/db";
 import cloudinary from "@/utils/cloudinary";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import User from "@/models/user.model";
+import { marked } from "marked";
 
 export async function POST(req) {
   await connectDB();
@@ -10,6 +11,7 @@ export async function POST(req) {
     const { url, fileName, userId, isFile } = await req.json();
 
     let notesContent;
+
     try {
       const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
       if (!process.env.GOOGLE_API_KEY) {
@@ -25,7 +27,7 @@ export async function POST(req) {
         throw new Error("Failed to generate notes content");
       }
 
-      notesContent = notesContent.replace(/[\*\#\-\_\=\+\~\!]/, "");
+      notesContent = notesContent.replace(/[\*\#\-\_\=\+\~\!]/g, "");
     } catch (error) {
       console.error("AI content generation failed:", error);
       return new Response(
