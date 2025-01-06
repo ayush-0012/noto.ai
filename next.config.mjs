@@ -8,6 +8,9 @@ const nextConfig = {
     };
     return config;
   },
+  images: {
+    domains: ["lh3.googleusercontent.com"],
+  },
 };
 
 export default nextConfig;
