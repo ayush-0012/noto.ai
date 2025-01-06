@@ -3,10 +3,16 @@
 import { X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { generateNotesUrl } from "@/utils/generateNotesUrl";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { notesLinkContext } from "../Context/NotesLinkProvider";
 
-const Modal = ({ showModal, setShowModal, setFileModal, setLoading }) => {
+const Modal = ({
+  showModal,
+  setShowModal,
+  setFileModal,
+  setLoading,
+  setGeneratingError,
+}) => {
   const { notesLink, setNotesLink } = useContext(notesLinkContext);
 
   const { data: session } = useSession();
@@ -28,6 +34,7 @@ const Modal = ({ showModal, setShowModal, setFileModal, setLoading }) => {
       const generatedUrl = response.data.note.fileUrl;
       setNotesLink(generatedUrl);
     } catch (error) {
+      setGeneratingError(true);
       console.log("error generating notes", error);
     } finally {
       setLoading(false);

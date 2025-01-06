@@ -11,6 +11,7 @@ const FileNameModal = ({
   setLoading,
   setFileNameModal,
   setConfirmationModal,
+  setGeneratingError,
 }) => {
   const [fileName, setFileName] = useState("");
   const { fileLink, setFileLink } = useContext(fileLinkContext);
@@ -31,6 +32,7 @@ const FileNameModal = ({
       const generatedUrl = response.data.note.fileUrl;
       setFileLink(generatedUrl);
     } catch (error) {
+      setGeneratingError(true);
       console.log("error generating notes", error);
     } finally {
       setLoading(false);
