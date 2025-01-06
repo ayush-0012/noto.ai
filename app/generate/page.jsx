@@ -9,11 +9,14 @@ import FileNameModal from "@/components/Modal/FileNameModal";
 import { notesLinkContext } from "@/components/Context/NotesLinkProvider";
 import Link from "next/link";
 import { fileLinkContext } from "@/components/Context/FileLinkProvider";
+import Image from "next/image";
+import TopicNameModal from "@/components/Modal/TopicNameModal";
 
 const Genearate = () => {
   const [loading, setloading] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(null);
   const [fileNameModal, setFileNameModal] = useState(false);
+  const [TopicModal, setTopicModal] = useState(false);
   const [generatingError, setGeneratingError] = useState(false);
   const { notesLink } = useContext(notesLinkContext);
   const { fileLink } = useContext(fileLinkContext);
@@ -50,8 +53,14 @@ const Genearate = () => {
             </div>
 
             <div>
-              <button onClick={() => handleSignOut()} className="text-white">
-                logout
+              <button className="text-white">
+                <Image
+                  src={session?.user?.image}
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                  alt="profilePic"
+                />
               </button>
             </div>
           </div>
@@ -79,9 +88,10 @@ const Genearate = () => {
             <Modal
               showModal={confirmationModal}
               setShowModal={setConfirmationModal}
-              setFileModal={setFileNameModal}
+              setTopicModal={setTopicModal}
               setLoading={setloading}
               setGeneratingError={setGeneratingError}
+              onCancel={() => setFileNameModal(false)}
             />
           )}
 
@@ -90,6 +100,15 @@ const Genearate = () => {
               onCancel={() => setFileNameModal(false)}
               setLoading={setloading}
               setFileNameModal={setFileNameModal}
+              setConfirmationModal={setConfirmationModal}
+              setGeneratingError={setGeneratingError}
+            />
+          )}
+          {TopicModal && (
+            <TopicNameModal
+              onCancel={() => setTopicModal(false)}
+              setLoading={setloading}
+              setTopicModal={setTopicModal}
               setConfirmationModal={setConfirmationModal}
               setGeneratingError={setGeneratingError}
             />
