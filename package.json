@@ -23,7 +23,8 @@
     "next": "^15.1.1-canary.23",
     "next-auth": "^4.24.11",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-toastify": "^11.0.2"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
