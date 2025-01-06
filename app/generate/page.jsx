@@ -14,6 +14,7 @@ const Genearate = () => {
   const [loading, setloading] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(null);
   const [fileNameModal, setFileNameModal] = useState(false);
+  const [generatingError, setGeneratingError] = useState(false);
   const { notesLink } = useContext(notesLinkContext);
   const { fileLink } = useContext(fileLinkContext);
 
@@ -32,6 +33,7 @@ const Genearate = () => {
   }
 
   function handleGenerateNotes() {
+    setGeneratingError(false);
     setConfirmationModal(true);
   }
 
@@ -79,6 +81,7 @@ const Genearate = () => {
               setShowModal={setConfirmationModal}
               setFileModal={setFileNameModal}
               setLoading={setloading}
+              setGeneratingError={setGeneratingError}
             />
           )}
 
@@ -88,6 +91,7 @@ const Genearate = () => {
               setLoading={setloading}
               setFileNameModal={setFileNameModal}
               setConfirmationModal={setConfirmationModal}
+              setGeneratingError={setGeneratingError}
             />
           )}
           {!notesLink ? (
@@ -131,6 +135,14 @@ const Genearate = () => {
                   {fileLink}
                 </Link>
               </div>
+            </div>
+          )}
+
+          {generatingError && !fileLink && !notesLink && (
+            <div>
+              <p className="text-lg font-semibold bg-clip-text text-transparent text-red-600 text-center mb-2">
+                Error occured while generating notes :/
+              </p>
             </div>
           )}
 
