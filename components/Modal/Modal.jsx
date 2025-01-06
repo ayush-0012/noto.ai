@@ -1,49 +1,22 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { generateNotesUrl } from "@/utils/generateNotesUrl";
-import { useContext } from "react";
-import { notesLinkContext } from "../Context/NotesLinkProvider";
+import TopicNameModal from "./TopicNameModal";
 
-const Modal = ({
-  showModal,
-  setShowModal,
-  setFileModal,
-  setLoading,
-  setGeneratingError,
-}) => {
-  const { notesLink, setNotesLink } = useContext(notesLinkContext);
-
-  const { data: session } = useSession();
-  const url = "https://developer.mozilla.org/en-US/docs/Web/Events";
-  const userId = session?.user?.id;
-  console.log(userId);
-  const fileName = url.replace(url, "notoAi_yourNotes");
-
+const Modal = ({ showModal, setShowModal, setFileModal, setTopicModal }) => {
   const handleYes = () => {
     setShowModal(false);
     setFileModal(true);
   };
 
-  const handleNo = async () => {
+  const handleNo = () => {
     setShowModal(false);
-    setLoading(true);
-    try {
-      const response = await generateNotesUrl(url, fileName, userId, false);
-      const generatedUrl = response.data.note.fileUrl;
-      setNotesLink(generatedUrl);
-    } catch (error) {
-      setGeneratingError(true);
-      console.log("error generating notes", error);
-    } finally {
-      setLoading(false);
-    }
+    setTopicModal(true);
   };
 
   return (
     <>
-      {showModal && (
+      {showModal ? (
         <div className="flex flex-col fixed inset-0 bg-black bg-opacity-90 z-40 items-center justify-center w-full min-h-screen">
           <div className=" bg-[#1a1a1a] rounded-lg w-[90%]">
             <div className="flex justify-between px-4 w-full items-center mt-4">
@@ -74,6 +47,8 @@ const Modal = ({
             </div>
           </div>
         </div>
+      ) : (
+        <TopicNameModal />
       )}
     </>
   );
