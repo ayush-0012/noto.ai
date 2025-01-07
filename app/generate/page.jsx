@@ -21,7 +21,7 @@ const Genearate = () => {
   const { notesLink } = useContext(notesLinkContext);
   const { fileLink } = useContext(fileLinkContext);
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const url =
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain";
@@ -31,15 +31,21 @@ const Genearate = () => {
   console.log(session?.user);
   console.log(userId);
 
-  function handleSignOut() {
-    signOut({ callbackUrl: "/" });
-  }
-
   function handleGenerateNotes() {
     setGeneratingError(false);
     setConfirmationModal(true);
   }
 
+  if (status === "loading") {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#0a0a0f]">
+        <div className="relative w-24 h-24">
+          <div className="absolute inset-0 border-t-4 border-purple-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-4 border-t-4 border-purple-500 rounded-full animate-spin"></div>
+        </div>
+      </div>
+    );
+  }
   return (
     <>
       <div className="min-h-screen w-full flex items-center justify-center">
