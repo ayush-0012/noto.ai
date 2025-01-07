@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { stringify } from "querystring";
 
 const UserSchema = new mongoose.Schema({
   email: {
@@ -23,6 +24,10 @@ const UserSchema = new mongoose.Schema({
         required: true,
       },
       fileId: {
+        type: String,
+        required: true,
+      },
+      fileName: {
         type: String,
         required: true,
       },
