@@ -2,7 +2,7 @@ import User from "@/models/user.model";
 import connectDB from "@/utils/db";
 
 export async function GET(req, { params }) {
-  const userId = params.userId;
+  const userId = await params.userId;
   console.log(userId);
   try {
     await connectDB();
