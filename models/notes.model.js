@@ -16,6 +16,10 @@ const notesSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    isFile: {
+      type: Boolean,
+      required: true,
+    },
   },
   { timestamps: true }
 );
