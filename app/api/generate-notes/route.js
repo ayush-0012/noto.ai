@@ -87,6 +87,7 @@ export async function POST(req) {
         title: fileName,
         fileUrl: cloudinaryResponse.secure_url,
         userId: userId,
+        isFile: isFile,
       });
 
       console.log("New Note ID", typeof newNote._id.toString());
