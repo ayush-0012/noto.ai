@@ -3,7 +3,6 @@ import connectDB from "@/utils/db";
 import cloudinary from "@/utils/cloudinary";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import User from "@/models/user.model";
-import { marked } from "marked";
 
 export async function POST(req) {
   await connectDB();
@@ -101,6 +100,7 @@ export async function POST(req) {
           generateHistory: {
             fileUrl: cloudinaryResponse.secure_url,
             fileId: newNote._id.toString(),
+            fileName: fileName,
           },
         },
       });
