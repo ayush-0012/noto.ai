@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useContext, useState } from "react";
 import { instructions } from "@/utils/content";
 import { BrainCog, Sparkles } from "lucide-react";
@@ -11,6 +11,7 @@ import Link from "next/link";
 import { fileLinkContext } from "@/components/Context/FileLinkProvider";
 import Image from "next/image";
 import TopicNameModal from "@/components/Modal/TopicNameModal";
+import { useRouter } from "next/navigation";
 
 const Genearate = () => {
   const [loading, setloading] = useState(false);
@@ -22,6 +23,7 @@ const Genearate = () => {
   const { fileLink } = useContext(fileLinkContext);
 
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   const url =
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain";
@@ -59,7 +61,10 @@ const Genearate = () => {
             </div>
 
             <div>
-              <button className="text-white">
+              <button
+                className="text-white"
+                onClick={() => router.push("/profile")}
+              >
                 <Image
                   src={session?.user?.image}
                   width={40}
