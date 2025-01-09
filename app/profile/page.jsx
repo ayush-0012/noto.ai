@@ -11,6 +11,7 @@ import Loader from "@/components/Loader";
 const Profile = () => {
   const [allNotes, setAllNotes] = useState([]);
   const [notesLoading, setNotesLoading] = useState(false);
+
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -42,7 +43,22 @@ const Profile = () => {
     signOut({ callbackUrl: "/" });
   };
 
-  const handleDeleteNotes = (noteId) => {};
+  const handleDeleteNotes = async (noteId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/delete-notes/${noteId}/${userId}`
+      );
+      console.log(response);
+      if (response.status === 200) {
+        // Remove the deleted note from the state
+        setAllNotes((prevNotes) =>
+          prevNotes.filter((note) => note.fileId !== noteId)
+        );
+      }
+    } catch (error) {
+      console.log("error occured while deleting the note", error);
+    }
+  };
 
   return (
     <>
@@ -79,31 +95,34 @@ const Profile = () => {
       {notesLoading && <Loader />}
 
       {/* rendering all the notes */}
-      {allNotes.map((note, index) => (
-        <div
-          key={index}
-          className="hover:border hover:border-[#321c43] p-3 mx-5 mt-4 rounded-lg bg-[#1a1a1a] cursor-pointer"
-        >
-          <div className=" p-3">
-            <p className="text-xl text-gray-200 font-semibold mb-3">
-              {note.fileName}
-            </p>
-            <div className="flex justify-between">
-              <div className=" text-purple-300  hover:underline hover:underline-offset-1">
-                <Link href={note.fileUrl} target="_blank">
-                  view notes
-                </Link>
+      {allNotes
+        .slice()
+        .reverse()
+        .map((note, index) => (
+          <div
+            key={index}
+            className="hover:border hover:border-[#321c43] p-3 mx-5 mt-4 rounded-lg bg-[#1a1a1a] cursor-pointer"
+          >
+            <div className=" p-3">
+              <p className="text-xl text-gray-200 font-semibold mb-3">
+                {note.fileName}
+              </p>
+              <div className="flex justify-between">
+                <div className=" text-purple-300  hover:underline hover:underline-offset-1">
+                  <Link href={note.fileUrl} target="_blank">
+                    view notes
+                  </Link>
+                </div>
+                <button
+                  className="text-red-500 hover:border rounded-full border-red-500 hover:bg-red-300"
+                  onClick={() => handleDeleteNotes(note.fileId)}
+                >
+                  <Trash2 className="w-5 h-5 m-2" />
+                </button>
               </div>
-              <button
-                className="text-red-500 hover:border rounded-full border-red-500 hover:bg-red-300"
-                onClick={() => handleDeleteNotes(note._id)}
-              >
-                <Trash2 className="w-5 h-5 m-2" />
-              </button>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
     </>
   );
 };
