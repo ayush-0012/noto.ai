@@ -3,10 +3,15 @@
 import { X } from "lucide-react";
 import TopicNameModal from "./TopicNameModal";
 
-const Modal = ({ showModal, setShowModal, setFileModal, setTopicModal }) => {
+const Modal = ({
+  showModal,
+  setShowModal,
+  setFileNameModal,
+  setTopicModal,
+}) => {
   const handleYes = () => {
     setShowModal(false);
-    setFileModal(true);
+    setFileNameModal(true);
   };
 
   const handleNo = () => {
