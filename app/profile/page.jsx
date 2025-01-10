@@ -17,7 +17,7 @@ const Profile = () => {
 
   console.log(session?.user?.id);
 
-  const userId = "677d5437c809a71dd0857a86"; //get it from session later
+  const userId = "6780232158c5fc910bdda18b"; //get it from session later
 
   useEffect(() => {
     const fetchAllNotes = async () => {
@@ -95,34 +95,40 @@ const Profile = () => {
       {notesLoading && <Loader />}
 
       {/* rendering all the notes */}
-      {allNotes
-        .slice()
-        .reverse()
-        .map((note, index) => (
-          <div
-            key={index}
-            className="hover:border hover:border-[#321c43] p-3 mx-5 mt-4 rounded-lg bg-[#1a1a1a] cursor-pointer"
-          >
-            <div className=" p-3">
-              <p className="text-xl text-gray-200 font-semibold mb-3">
-                {note.fileName}
-              </p>
-              <div className="flex justify-between">
-                <div className=" text-purple-300  hover:underline hover:underline-offset-1">
-                  <Link href={note.fileUrl} target="_blank">
-                    view notes
-                  </Link>
+      {!allNotes || allNotes.length === 0 ? (
+        <p className="text-gray-400 text-2xl text-center mt-24 font-bold">
+          Not notes yet
+        </p>
+      ) : (
+        allNotes
+          .slice()
+          .reverse()
+          .map((note, index) => (
+            <div
+              key={index}
+              className="hover:border hover:border-[#321c43] p-3 mx-5 mt-4 rounded-lg bg-[#1a1a1a] cursor-pointer"
+            >
+              <div className=" p-3">
+                <p className="text-xl text-gray-200 font-semibold mb-3">
+                  {note.fileName}
+                </p>
+                <div className="flex justify-between">
+                  <div className=" text-purple-300  hover:underline hover:underline-offset-1">
+                    <Link href={note.fileUrl} target="_blank">
+                      view notes
+                    </Link>
+                  </div>
+                  <button
+                    className="text-red-500 hover:border rounded-full border-red-500 hover:bg-red-300"
+                    onClick={() => handleDeleteNotes(note.fileId)}
+                  >
+                    <Trash2 className="w-5 h-5 m-2" />
+                  </button>
                 </div>
-                <button
-                  className="text-red-500 hover:border rounded-full border-red-500 hover:bg-red-300"
-                  onClick={() => handleDeleteNotes(note.fileId)}
-                >
-                  <Trash2 className="w-5 h-5 m-2" />
-                </button>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+      )}
     </>
   );
 };
