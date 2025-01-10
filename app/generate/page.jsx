@@ -99,10 +99,8 @@ const Genearate = () => {
             <Modal
               showModal={confirmationModal}
               setShowModal={setConfirmationModal}
+              setFileNameModal={setFileNameModal}
               setTopicModal={setTopicModal}
-              setLoading={setloading}
-              setGeneratingError={setGeneratingError}
-              onCancel={() => setFileNameModal(false)}
             />
           )}
 
