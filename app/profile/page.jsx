@@ -11,6 +11,7 @@ import Loader from "@/components/Loader";
 const Profile = () => {
   const [allNotes, setAllNotes] = useState([]);
   const [notesLoading, setNotesLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState({});
 
   const router = useRouter();
   const { data: session } = useSession();
@@ -44,19 +45,22 @@ const Profile = () => {
   };
 
   const handleDeleteNotes = async (noteId) => {
+    setDeleteLoading((prevValue) => ({ ...prevValue, [noteId]: true }));
     try {
       const response = await axios.delete(
         `http://localhost:3000/api/delete-notes/${noteId}/${userId}`
       );
       console.log(response);
       if (response.status === 200) {
-        // Remove the deleted note from the state
+        // removing the deleted note from the state
         setAllNotes((prevNotes) =>
           prevNotes.filter((note) => note.fileId !== noteId)
         );
       }
     } catch (error) {
       console.log("error occured while deleting the note", error);
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -118,12 +122,16 @@ const Profile = () => {
                       view notes
                     </Link>
                   </div>
-                  <button
-                    className="text-red-500 hover:border rounded-full border-red-500 hover:bg-red-300"
-                    onClick={() => handleDeleteNotes(note.fileId)}
-                  >
-                    <Trash2 className="w-5 h-5 m-2" />
-                  </button>
+                  {deleteLoading[note.fileId] ? (
+                    <span className="text-red-500">deleting...</span>
+                  ) : (
+                    <button
+                      className="text-red-500 hover:border rounded-full border-red-500 hover:bg-red-300"
+                      onClick={() => handleDeleteNotes(note.fileId)}
+                    >
+                      <Trash2 className="w-5 h-5 m-2" />
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

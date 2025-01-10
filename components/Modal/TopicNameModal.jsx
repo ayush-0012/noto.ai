@@ -14,7 +14,8 @@ const TopicNameModal = ({
   const [notesTopic, setNotesTopic] = useState("");
 
   const { data: session } = useSession();
-  const url = "https://developer.mozilla.org/en-US/docs/Web/Events";
+  const url =
+    "https://medium.com/@techsuneel99/node-js-caching-and-database-optimization-for-high-performance-apis-219f5280923b";
   const userId = session?.user?.id;
   console.log(userId);
 
