@@ -3,10 +3,10 @@
   "name": "Noto.ai",
   "version": "1.0.0",
   "description": "An AI-powered note-taking assistant for quick and efficient note creation.",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": ["activeTab", "storage", "tabs", "http://*/*", "https://*/*"],
   "host_permissions": [
     "http://localhost:3000/*",
-    "https://your-backend-domain.com/*"
+    "https://notoai.vercel.app/*"
   ],
   "action": {
     "default_popup": "index.html",
