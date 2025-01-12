@@ -14,11 +14,21 @@ const Profile = () => {
   const [deleteLoading, setDeleteLoading] = useState({});
 
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
-  console.log(session?.user?.id);
+  const userId = session?.user?.id;
 
-  const userId = "6780232158c5fc910bdda18b"; //get it from session later
+  //triggering session to get the userID before fetching notes
+  useEffect(() => {
+    async function triggerSession() {
+      const updatedSession = await update();
+      console.log("inside fn updated userId:", updatedSession?.user?.id);
+    }
+
+    triggerSession();
+  }, []);
+
+  console.log("outside fn", userId);
 
   useEffect(() => {
     const fetchAllNotes = async () => {
@@ -38,7 +48,7 @@ const Profile = () => {
     };
 
     fetchAllNotes();
-  }, []);
+  }, [userId]);
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });
