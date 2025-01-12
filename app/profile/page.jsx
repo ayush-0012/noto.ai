@@ -106,7 +106,7 @@ const Profile = () => {
       </div>
 
       {/* added a loader before rendering the notes */}
-      {notesLoading && <Loader />}
+      {notesLoading && userId && <Loader />}
 
       {/* rendering all the notes */}
       {!allNotes || allNotes.length === 0 ? (
