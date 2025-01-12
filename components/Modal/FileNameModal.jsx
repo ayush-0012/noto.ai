@@ -15,12 +15,20 @@ const FileNameModal = ({
 }) => {
   const [fileName, setFileName] = useState("");
   const { fileLink, setFileLink } = useContext(fileLinkContext);
+  const [activeTabUrl, setActiveTabUrl] = useState("");
   const { data: session } = useSession();
 
-  const url =
-    "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting";
+  // const url =
+  //   "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting";
 
   const userId = session?.user?.id;
+
+  useEffect(() => {
+    // Fetch the active tab URL from chrome storage
+    chrome.storage.local.get("activeTabUrl", (result) => {
+      setActiveTabUrl(result.activeTabUrl || "");
+    });
+  }, []);
 
   async function handleFileName() {
     setFileNameModal(false);
@@ -28,7 +36,12 @@ const FileNameModal = ({
     setConfirmationModal(false);
 
     try {
-      const response = await generateNotesUrl(url, fileName, userId, true);
+      const response = await generateNotesUrl(
+        activeTabUrl,
+        fileName,
+        userId,
+        true
+      );
       const generatedUrl = response.data.note.fileUrl;
       setFileLink(generatedUrl);
     } catch (error) {

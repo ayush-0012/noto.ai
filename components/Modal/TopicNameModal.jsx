@@ -3,6 +3,7 @@ import { notesLinkContext } from "../Context/NotesLinkProvider";
 import { useSession } from "next-auth/react";
 import { X } from "lucide-react";
 import { generateNotesUrl } from "@/utils/generateNotesUrl";
+import { useParams } from "next/navigation";
 
 const TopicNameModal = ({
   onCancel,
@@ -12,18 +13,32 @@ const TopicNameModal = ({
 }) => {
   const { notesLink, setNotesLink } = useContext(notesLinkContext);
   const [notesTopic, setNotesTopic] = useState("");
+  const [activeTabUrl, setActiveTabUrl] = useState("");
 
   const { data: session } = useSession();
-  const url =
-    "https://medium.com/@techsuneel99/node-js-caching-and-database-optimization-for-high-performance-apis-219f5280923b";
+  // const url =
+  //   "https://medium.com/@techsuneel99/node-js-caching-and-database-optimization-for-high-performance-apis-219f5280923b";
+
   const userId = session?.user?.id;
   console.log(userId);
+
+  useEffect(() => {
+    // Fetch the active tab URL from chrome storage
+    chrome.storage.local.get("activeTabUrl", (result) => {
+      setActiveTabUrl(result.activeTabUrl || "");
+    });
+  }, []);
 
   const handleGenerate = async () => {
     setLoading(true);
     setTopicModal(false);
     try {
-      const response = await generateNotesUrl(url, notesTopic, userId, false);
+      const response = await generateNotesUrl(
+        activeTabUrl,
+        notesTopic,
+        userId,
+        false
+      );
       const generatedUrl = response.data.note.fileUrl;
       setNotesLink(generatedUrl);
     } catch (error) {
