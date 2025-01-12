@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { instructions } from "@/utils/content";
 import { BrainCog, Sparkles } from "lucide-react";
 import Modal from "@/components/Modal/Modal";
@@ -22,16 +22,21 @@ const Genearate = () => {
   const { notesLink } = useContext(notesLinkContext);
   const { fileLink } = useContext(fileLinkContext);
 
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  const { data: session, status, update } = useSession();
 
-  const url =
-    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain";
-  const fileName = "prototype chain";
+  const router = useRouter();
   const userId = session?.user?.id;
 
-  console.log(session?.user);
-  console.log(userId);
+  useEffect(() => {
+    async function triggerSession() {
+      const updatedSession = await update();
+      console.log("inside fn updated userId:", updatedSession?.user?.id);
+    }
+
+    triggerSession();
+  }, []);
+
+  console.log("outside fn", userId);
 
   function handleGenerateNotes() {
     setGeneratingError(false);
