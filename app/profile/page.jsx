@@ -16,8 +16,6 @@ const Profile = () => {
   const router = useRouter();
   const { data: session, update } = useSession();
 
-  const userId = session?.user?.id;
-
   //triggering session to get the userID before fetching notes
   useEffect(() => {
     async function triggerSession() {
@@ -27,6 +25,8 @@ const Profile = () => {
 
     triggerSession();
   }, []);
+
+  const userId = session?.user?.id;
 
   console.log("outside fn", userId);
 
