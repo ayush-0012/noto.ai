@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation";
 import { ArrowLeft, LogOut, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import Loader from "@/components/Loader";
+import axiosInstance from "@/utils/axiosInstance";
 
 const Profile = () => {
   const [allNotes, setAllNotes] = useState([]);
@@ -34,9 +34,7 @@ const Profile = () => {
     const fetchAllNotes = async () => {
       setNotesLoading(true);
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/users/${userId}`
-        );
+        const response = await axiosInstance.get(`/api/users/${userId}`);
 
         console.log(response.data.user);
         setAllNotes(response.data.user);
@@ -57,8 +55,8 @@ const Profile = () => {
   const handleDeleteNotes = async (noteId) => {
     setDeleteLoading((prevValue) => ({ ...prevValue, [noteId]: true }));
     try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/delete-notes/${noteId}/${userId}`
+      const response = await axiosInstance.delete(
+        `/api/delete-notes/${noteId}/${userId}`
       );
       console.log(response);
       if (response.status === 200) {

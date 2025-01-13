@@ -1,16 +1,13 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 export async function generateNotesUrl(url, fileName, userId, isFile) {
   try {
-    const response = await axios.post(
-      "http://localhost:3000/api/generate-notes",
-      {
-        url,
-        fileName,
-        userId,
-        isFile,
-      }
-    );
+    const response = await axiosInstance.post("api/generate-notes", {
+      url,
+      fileName,
+      userId,
+      isFile,
+    });
 
     return response;
   } catch (error) {
