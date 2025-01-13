@@ -45,7 +45,9 @@ const Profile = () => {
       }
     };
 
-    fetchAllNotes();
+    if (userId !== "undefined") {
+      fetchAllNotes();
+    }
   }, [userId]);
 
   const handleSignOut = () => {
