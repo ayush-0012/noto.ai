@@ -4,10 +4,7 @@
   "version": "1.0.0",
   "description": "An AI-powered note-taking assistant for quick and efficient note creation.",
   "permissions": ["activeTab", "storage", "tabs", "http://*/*", "https://*/*"],
-  "host_permissions": [
-    "http://localhost:3000/*",
-    "https://notoai.vercel.app/*"
-  ],
+  "host_permissions": ["http://localhost:*/*", "https://notoai.vercel.app/*"],
   "action": {
     "default_popup": "index.html",
     "default_icon": {

@@ -43,7 +43,7 @@ const Genearate = () => {
     setConfirmationModal(true);
   }
 
-  if (status === "loading") {
+  if (status === "loading" && !userId) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#0a0a0f]">
         <div className="relative w-24 h-24">
