@@ -1,7 +1,8 @@
+import { cors } from "@/middleware/cors";
 import User from "@/models/user.model";
 import connectDB from "@/utils/db";
 
-export async function GET(req, { params }) {
+export const GET = cors(async (req, { params }) => {
   const { userId } = await params;
   console.log(userId);
   try {
@@ -26,4 +27,4 @@ export async function GET(req, { params }) {
       status: 500,
     });
   }
-}
+});

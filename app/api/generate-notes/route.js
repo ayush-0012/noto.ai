@@ -3,8 +3,9 @@ import connectDB from "@/utils/db";
 import cloudinary from "@/utils/cloudinary";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import User from "@/models/user.model";
+import { cors } from "@/middleware/cors";
 
-export async function POST(req) {
+export const POST = cors(async (req) => {
   await connectDB();
   try {
     const { url, fileName, userId, isFile } = await req.json();
@@ -134,4 +135,4 @@ export async function POST(req) {
       { status: 500 }
     );
   }
-}
+});

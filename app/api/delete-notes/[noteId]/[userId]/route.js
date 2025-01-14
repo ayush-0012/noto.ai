@@ -1,8 +1,9 @@
+import { cors } from "@/middleware/cors";
 import Notes from "@/models/notes.model";
 import User from "@/models/user.model";
 import connectDB from "@/utils/db";
 
-export async function DELETE(req, { params }) {
+export const DELETE = cors(async (req, { params }) => {
   try {
     const { noteId, userId } = await params;
     await connectDB();
@@ -41,4 +42,4 @@ export async function DELETE(req, { params }) {
       { status: 200 }
     );
   }
-}
+});

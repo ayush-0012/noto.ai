@@ -10,6 +10,9 @@ export const metadata = {
   description:
     "Generate notes with one click, just go to your site from wherever you want to take/create notes and click on generate",
 };
+
+export const dynamic = "force-dynamic";
+
 const AppProviders = ({ children, session }) => (
   <Provider session={session}>
     <NotesLinkProvider>

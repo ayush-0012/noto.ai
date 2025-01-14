@@ -2,6 +2,7 @@ import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import User from "@/models/user.model";
 import connectDB from "@/utils/db";
+import { cors } from "@/middleware/cors";
 
 export const handler = NextAuth({
   providers: [
@@ -78,4 +79,6 @@ export const handler = NextAuth({
   },
 });
 
-export { handler as GET, handler as POST };
+const corsWrappedHandler = cors(handler);
+
+export { corsWrappedHandler as GET, corsWrappedHandler as POST };
