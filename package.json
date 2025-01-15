@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "rm -rf .next out && next build && next export -o out",
+    "build": "rm -rf .next out && next build && cp -r out/ extension/",
+    "clean": "rm -rf .next out extension/out",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
